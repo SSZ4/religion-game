@@ -1,14 +1,14 @@
 package Buff;
-import Nation.Nation;
+import World.World;
 
 public class BigBuff extends Buff{
-	private double buff_delta[][]=new double[Nation.NUMBER_OF_NATION][Nation.NUMBER_OF_NATION];//buff_delta값
+	private double buff_delta[][]=new double[World.NUMBER_OF_NATION][World.NUMBER_OF_NATION];//buff_delta값
 	
 	public BigBuff(String buff_name, int duration_time){//생성자1
 		super(buff_name,duration_time);
 		
-		for(int i=0;i<Nation.NUMBER_OF_NATION;i++){
-			for(int j=0;j<Nation.NUMBER_OF_NATION;j++){
+		for(int i=0;i<World.NUMBER_OF_NATION;i++){
+			for(int j=0;j<World.NUMBER_OF_NATION;j++){
 				buff_delta[i][j]=1;
 			}
 		}

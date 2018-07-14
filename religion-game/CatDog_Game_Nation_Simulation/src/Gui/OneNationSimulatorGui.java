@@ -1,9 +1,8 @@
 package Gui;
 import java.awt.*;
 import javax.swing.*;
-//import java.awt.event.*;
 import Buff.*;
-import Nation.*;
+import World.*;
 public class OneNationSimulatorGui extends JFrame implements Runnable{
 	private static final long serialVersionUID = 1L;
 	private final int number_of_religion=4;//Á¾±³ ¼ö
@@ -13,6 +12,7 @@ public class OneNationSimulatorGui extends JFrame implements Runnable{
 	Image buff_image;
 	Graphics buff_graphics;
 	
+	World world;
 	Nation nation;
 	
 	int turn;
@@ -23,7 +23,8 @@ public class OneNationSimulatorGui extends JFrame implements Runnable{
 		setVisible(true);
 		setResizable(false);
 		
-		nation = new Nation("Korea",10000,1);
+		world = new World();
+		nation=world.getNationsAt(0);
 		
 		main_thread=new Thread(this);
 		main_thread.start();
@@ -50,7 +51,14 @@ public class OneNationSimulatorGui extends JFrame implements Runnable{
 					nation.addSmallBuff(sb);
 				}
 				
-				nation.updatePopulation();
+				if(turn==40){
+					nation.unlockReligion(3);
+				}
+				SmallBuff passive_sb = new SmallBuff("passive",1);
+				passive_sb.modifyBuffTheta(nation.getMostDominateReligion(), nation.getMostDominateReligion(), 2);
+				nation.addSmallBuff(passive_sb);
+				
+				nation.update();
 				turn++;
 				Thread.sleep(1000);
 			}catch(Exception e){
@@ -77,7 +85,7 @@ public class OneNationSimulatorGui extends JFrame implements Runnable{
 		g.drawString(String.valueOf(turn), 900, 100);
 		g.drawString("Pop.",50,200);
 		for(int i=0;i<=number_of_religion;i++){
-			g.drawString(String.valueOf(i), 50, 300+150*i);
+			g.drawString(world.getReligionsAt(i).getName(), 50, 300+150*i);
 		}
 	}
 	private void drawSticks(Graphics g){
