@@ -23,7 +23,10 @@ public class Nation {
 	
 	private boolean religion_expressed[]=new boolean[Religion.NUMBER_OF_RELIGION+1];//종교 발현
 	
-	public Nation(String name, int population, int religion){//생성자:나라이름,인구수,그 나라의 종교 선택 가능
+	private World world;
+	
+	public Nation(World world, String name, int population, int religion){//생성자:나라이름,인구수,그 나라의 종교 선택 가능
+		this.world=world;
 		this.name=name;//나라 이름 초기화
 		this.population=population;//나라 인구수 초기화
 		
@@ -96,6 +99,12 @@ public class Nation {
 	}
 	
 	public void update(){
+		//가장 우세한 종교 버프
+		SmallBuff dominate_sb = new SmallBuff("가장 우세한 종교",1);
+		dominate_sb.modifyBuffTheta(getMostDominateReligion(), getMostDominateReligion(), world.getReligionsAt(getMostDominateReligion()).getDef());//***임의의 값을 붙임 밸런스 조정가능
+		addSmallBuff(dominate_sb);
+		
+		
 		for(int i=0;i<small_buff_list.size();i++){
 			try{
 				small_buff_list.get(i).countTheClock();

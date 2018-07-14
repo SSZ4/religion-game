@@ -6,7 +6,7 @@ public class World {
 	public static final int NUMBER_OF_NATION=3;//전체 나라 개수
 	
 	private int population;//전체 인구수
-	private int population_by_religion[]=new int[Religion.NUMBER_OF_RELIGION];//전체 종교별 인구수
+	private int population_by_religion[]=new int[Religion.NUMBER_OF_RELIGION+1];//전체 종교별 인구수
 	
 	private int most_dominate_religion;
 	
@@ -30,9 +30,9 @@ public class World {
 		religions[2]=new Religion("대건",2);
 		religions[3]=new Religion("지훈",3);
 		religions[4]=new Religion("승진",4);
-		nations[0]=new Nation("Korea",10000,Religion.PLAYER);
-		nations[1]=new Nation("Japan",20000,Religion.ATHEISM);
-		nations[2]=new Nation("China",100000,Religion.ATHEISM);
+		nations[0]=new Nation(this,"Korea",10000,Religion.PLAYER);
+		nations[1]=new Nation(this,"Japan",20000,Religion.ATHEISM);
+		nations[2]=new Nation(this,"China",100000,Religion.ATHEISM);
 		
 		updatePopulation();
 		updatePopulationByReligion();
@@ -110,13 +110,20 @@ public class World {
 			for(int j=0;j<NUMBER_OF_NATION;j++){
 				if(delta[i][j]>7){//***임의의 값을 붙임 밸런스 조정가능
 					nations[j].unlockReligion(nations[i].getMostDominateReligion());
+					SmallBuff sb = new SmallBuff("고무",1);
+					sb.modifyBuffTheta(nations[j].getMostDominateReligion(), nations[i].getMostDominateReligion(), religions[nations[i].getMostDominateReligion()].getOff());//***임의의 값을 붙임 밸런스 조정가능
+					nations[j].addSmallBuff(sb);
 				}
 				if(delta[i][j]>17){//***임의의 값을 붙임 밸런스 조정가능
-					SmallBuff sb = new SmallBuff("고무",1);//무교는 전도 버프를 주지 않으면 어떠할까 고민중...
-					sb.modifyBuffTheta(nations[j].getMostDominateReligion(), nations[i].getMostDominateReligion(), 1.5);//***임의의 값을 붙임 밸런스 조정가능
+					SmallBuff sb = new SmallBuff("강력한 고무",1);//무교는 전도 버프를 주지 않으면 어떠할까 고민중...
+					sb.modifyBuffTheta(nations[j].getMostDominateReligion(), nations[i].getMostDominateReligion(), religions[nations[i].getMostDominateReligion()].getOff()*2);//***임의의 값을 붙임 밸런스 조정가능
 					nations[j].addSmallBuff(sb);
 				}
 			}
+		}
+		
+		for(int i=0;i<NUMBER_OF_NATION;i++){
+			nations[i].update();
 		}
 		
 		updatePopulation();

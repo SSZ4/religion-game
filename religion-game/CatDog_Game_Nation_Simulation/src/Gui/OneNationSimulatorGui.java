@@ -3,9 +3,9 @@ import java.awt.*;
 import javax.swing.*;
 import Buff.*;
 import World.*;
+import Religion.Religion;
 public class OneNationSimulatorGui extends JFrame implements Runnable{
 	private static final long serialVersionUID = 1L;
-	private final int number_of_religion=4;//종교 수
 	
 	Thread main_thread;
 	
@@ -54,13 +54,10 @@ public class OneNationSimulatorGui extends JFrame implements Runnable{
 				if(turn==40){
 					nation.unlockReligion(3);
 				}
-				SmallBuff passive_sb = new SmallBuff("passive",1);
-				passive_sb.modifyBuffTheta(nation.getMostDominateReligion(), nation.getMostDominateReligion(), 2);
-				nation.addSmallBuff(passive_sb);
 				
 				nation.update();
 				turn++;
-				Thread.sleep(1000);
+				Thread.sleep(1000);//***임의의 값을 붙임 밸런스 조정가능
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -84,7 +81,7 @@ public class OneNationSimulatorGui extends JFrame implements Runnable{
 		g.drawString(nation.getName(), 50, 100);
 		g.drawString(String.valueOf(turn), 900, 100);
 		g.drawString("Pop.",50,200);
-		for(int i=0;i<=number_of_religion;i++){
+		for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
 			g.drawString(world.getReligionsAt(i).getName(), 50, 300+150*i);
 		}
 	}
@@ -93,7 +90,7 @@ public class OneNationSimulatorGui extends JFrame implements Runnable{
 		g.setColor(Color.BLUE);
 		g.fillRect(200, 200-30, nation.getPopulation()*5/ratio, 10);
 		g.drawString(String.valueOf(nation.getPopulation()),200+nation.getPopulation()*5/ratio,200);
-		for(int i=0;i<=number_of_religion;i++){
+		for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
 			if(i==nation.getMostDominateReligion()){
 				g.setColor(Color.RED);
 			}else{
