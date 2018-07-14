@@ -36,7 +36,6 @@ public class World {
 		
 		updatePopulation();
 		updatePopulationByReligion();
-		
 		updateMostDominateReligion();
 		updateDeltaValue();
 	}
@@ -119,6 +118,10 @@ public class World {
 				}
 			}
 		}
+		
+		updatePopulation();
+		updatePopulationByReligion();
+		updateMostDominateReligion();
 	}
 	
 	
