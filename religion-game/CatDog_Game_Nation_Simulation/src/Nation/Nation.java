@@ -1,16 +1,17 @@
 package Nation;
 import java.util.*;
 import Buff.*;
+import Religion.Religion;
 
 public class Nation {
-	private final int number_of_religion=4;//종교 수
+	public static final int NUMBER_OF_NATION=3;
 	
-	private String name;//나라 이름
+	private final String name;//나라 이름
 	private int population;//나라 인구수
-	private int population_by_religion[]=new int[number_of_religion+1];//종교별 나라 인구수
+	private int population_by_religion[]=new int[Religion.NUMBER_OF_RELIGION+1];//종교별 나라 인구수
 	
-	private double theta[][]=new double[number_of_religion+1][number_of_religion+1];//theta값
-	private final double init_theta[][]={
+	private double theta[][]=new double[Religion.NUMBER_OF_RELIGION+1][Religion.NUMBER_OF_RELIGION+1];//theta값
+	private static final double INIT_THETA[][]={
 			{10,1,1,1,1},
 			{1,10,1,1,1},
 			{1,1,10,1,1},
@@ -22,7 +23,7 @@ public class Nation {
 	
 	private int most_dominate_religion;//가장 우세한 종교
 	
-	private boolean religion_expressed[]=new boolean[number_of_religion+1];//종교 발현
+	private boolean religion_expressed[]=new boolean[Religion.NUMBER_OF_RELIGION+1];//종교 발현
 	
 	public Nation(String name, int population, int religion){//생성자:나라이름,인구수,그 나라의 종교 선택 가능
 		this.name=name;//나라 이름 초기화
@@ -31,23 +32,23 @@ public class Nation {
 		small_buff_list = new ArrayList<SmallBuff>();
 		
 		if(religion==0){//0:무교
-			for(int i=0;i<=number_of_religion;i++){
+			for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
 				religion_expressed[i]=false;
 			}
 			religion_expressed[0]=true;
-			for(int i=1;i<=number_of_religion;i++){
+			for(int i=1;i<=Religion.NUMBER_OF_RELIGION;i++){
 				population_by_religion[i]=0;
 			}
 			population_by_religion[0]=population;
 			//무교일 경우 다른 무교=인구수, 다른종교=0
 		}else{//종교가 있을경우
-			for(int i=0;i<=number_of_religion;i++){
+			for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
 				religion_expressed[i]=false;
 			}
 			religion_expressed[0]=true;
 			religion_expressed[religion]=true;
 			
-			for(int i=1;i<=number_of_religion;i++){
+			for(int i=1;i<=Religion.NUMBER_OF_RELIGION;i++){
 				population_by_religion[i]=0;
 			}
 			population_by_religion[religion]=population/10;
@@ -61,7 +62,7 @@ public class Nation {
 	
 	private void updateMostDominateReligion(){//가장 우세한 종교의 업데이트 함수
 		int tmp_religion=0;
-		for(int i=0;i<=number_of_religion;i++){
+		for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
 			if(population_by_religion[tmp_religion]<population_by_religion[i]){
 				tmp_religion=i;
 			}
@@ -70,9 +71,9 @@ public class Nation {
 	}
 	
 	private void resetThetaValue(){//theta값 리셋 함수
-		for(int i=0;i<=number_of_religion;i++){
-			for(int j=0;j<=number_of_religion;j++){
-				theta[i][j]=init_theta[i][j];
+		for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
+			for(int j=0;j<=Religion.NUMBER_OF_RELIGION;j++){
+				theta[i][j]=INIT_THETA[i][j];
 			}
 		}
 	}
@@ -82,21 +83,21 @@ public class Nation {
 		resetThetaValue();
 		for(int a=0;a<small_buff_list.size();a++){
 			SmallBuff sb=small_buff_list.get(a);
-			for(int i=0;i<=number_of_religion;i++){
-				for(int j=0;j<=number_of_religion;j++){
+			for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
+				for(int j=0;j<=Religion.NUMBER_OF_RELIGION;j++){
 					theta[i][j]*=sb.getBuffThetaAt(i, j);
 				}
 			}
 		}
-		for(int i=0;i<=number_of_religion;i++){
+		for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
 			if(religion_expressed[i]==false){
-				for(int j=0;j<=number_of_religion;j++){
+				for(int j=0;j<=Religion.NUMBER_OF_RELIGION;j++){
 					theta[j][i]=0;
 				}
 			}
 		}
-		for(int i=0;i<=number_of_religion;i++){
-			for(int j=0;j<=number_of_religion;j++){
+		for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
+			for(int j=0;j<=Religion.NUMBER_OF_RELIGION;j++){
 				System.out.print(theta[i][j]+"\t");
 			}
 			System.out.println("");
@@ -114,17 +115,17 @@ public class Nation {
 			}
 		}
 		int new_population=0;
-		int new_population_by_religion[]=new int[number_of_religion+1];
-		for(int i=0;i<=number_of_religion;i++){
+		int new_population_by_religion[]=new int[Religion.NUMBER_OF_RELIGION+1];
+		for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
 			new_population_by_religion[i]=0;
 		}
-		for(int i=0;i<=number_of_religion;i++){
+		for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
 			double sum_of_theta=0;
 			int sum_of_religious_population=0;
-			for(int j=0;j<=number_of_religion;j++){
+			for(int j=0;j<=Religion.NUMBER_OF_RELIGION;j++){
 				sum_of_theta+=theta[i][j];
 			}
-			for(int j=1;j<=number_of_religion;j++){
+			for(int j=1;j<=Religion.NUMBER_OF_RELIGION;j++){
 				new_population_by_religion[j]+=(int)(population_by_religion[i]*(theta[i][j]/sum_of_theta));
 				sum_of_religious_population+=(int)(population_by_religion[i]*(theta[i][j]/sum_of_theta));
 			}
@@ -133,7 +134,7 @@ public class Nation {
 				new_population_by_religion[0]=0;
 			}
 		}
-		for(int i=0;i<=number_of_religion;i++){
+		for(int i=0;i<=Religion.NUMBER_OF_RELIGION;i++){
 			new_population+=new_population_by_religion[i];
 			population_by_religion[i]=(int)new_population_by_religion[i];
 		}
