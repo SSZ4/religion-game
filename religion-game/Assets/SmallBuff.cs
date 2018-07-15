@@ -12,7 +12,6 @@ public class SmallBuff : MonoBehaviour
 
 	private float[,] buff_theta;//=new float[number_of_religion + 1, number_of_religion + 1];//buff_theta값
 
-
 	// Use this for initialization
 	void Start()
 	{
@@ -32,7 +31,7 @@ public class SmallBuff : MonoBehaviour
 
 	public void CountTheClock()
 	{
-		if(duration_time <= 0){
+		if(duration_time == 0){
 			throw new ExpiredBuffException();
 		}
 		else{
